@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZVS System (Zact Video Streaming System)
 
-## Getting Started
+## Présentation
 
-First, run the development server:
+ZVS System est une application de streaming vidéo basée sur Next.js, permettant de lire des vidéos en HLS (HTTP Live Streaming) avec une interface moderne et réactive. Le projet propose un lecteur vidéo avancé, une gestion dynamique des vidéos et un système de proxy pour sécuriser et optimiser la diffusion des flux HLS.
+
+> **Note :** L’intégration complète des sous-titres est en cours de développement.
+
+---
+
+## Fonctionnalités principales
+
+- **Lecture de vidéos HLS** : Support natif HLS.js pour une compatibilité maximale.
+- **Liste dynamique de vidéos** : Récupération automatique des vidéos disponibles via une API.
+- **Proxy sécurisé** : Les flux HLS et les sous-titres passent par un proxy Next.js pour plus de sécurité.
+- **Interface utilisateur moderne** : Composants réutilisables (boutons, sliders, dropdowns, etc.).
+- **Thème adaptatif** : Support du mode sombre/clair via `next-themes`.
+- **Gestion des erreurs et du chargement** : Feedback utilisateur en cas de problème réseau ou de format.
+
+---
+
+## Architecture
+
+```
+src/
+├── app/
+│   ├── api/                # Endpoints API Next.js (proxy HLS, vidéos)
+│   │   ├── hls/[...path]/  # Proxy dynamique pour les flux HLS
+│   │   └── videos/         # Endpoint pour la liste et le détail des vidéos
+│   ├── layout.tsx          # Layout global, gestion du thème
+│   ├── page.tsx            # Page principale, affichage du lecteur et de la liste
+│   └── api.ts              # Types et mock API (pour développement)
+├── components/
+│   ├── theme-provider.tsx  # Gestion du thème (sombre/clair)
+│   └── ui/                 # Composants UI réutilisables (player, boutons, etc.)
+└── lib/                    # Fonctions utilitaires
+```
+
+---
+
+## Fonctionnement
+
+### 1. Récupération des vidéos
+
+- Au chargement, l’application interroge `/api/videos` pour obtenir la liste des vidéos disponibles (titre, URL HLS, image de prévisualisation, etc.).
+- L’API Next.js fait office de proxy vers un backend (par défaut sur `localhost:5000`).
+
+### 2. Lecture vidéo
+
+- Lorsqu’une vidéo est sélectionnée, le lecteur utilise HLS.js pour lire le flux.
+- Les URLs HLS sont automatiquement proxifiées via `/api/hls/` pour sécuriser l’accès.
+
+### 3. Sous-titres
+
+- Le lecteur supporte l’ajout de pistes de sous-titres (VTT).
+- **⚠️ L’intégration complète des sous-titres est en cours de développement.**
+
+### 4. Interface utilisateur
+
+- Le lecteur propose toutes les fonctionnalités modernes : play/pause, seek, volume, plein écran, sélection de sous-titres (à venir), etc.
+- Les composants UI sont personnalisés et réutilisables.
+
+---
+
+## Configuration
+
+### Prérequis
+
+- Node.js 18+
+- Un backend HLS (par défaut attendu sur `localhost:5000`)
+
+### Installation
+
+```bash
+npm install
+```
+
+### Lancement en développement
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L’application sera disponible sur [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Personnalisation
 
-## Learn More
+- **Backend HLS** : Modifiez les URLs dans `next.config.ts` si votre backend n’est pas sur `localhost:5000`.
+- **Thème** : Le thème s’adapte automatiquement au système, mais peut être personnalisé.
+- **Composants UI** : Les composants du dossier `components/ui/` sont réutilisables dans d’autres projets Next.js.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Limitations et évolutions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- L’intégration des sous-titres (VTT, multi-langues) est en cours d’implémentation.
