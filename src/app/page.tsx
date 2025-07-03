@@ -11,7 +11,7 @@ import {
   MediaPlayerError,
   MediaPlayerFullscreen,
   MediaPlayerLoading,
-  MediaPlayerPiP,
+  MediaPlayerLoop,
   MediaPlayerPlay,
   MediaPlayerSeek,
   MediaPlayerSeekBackward,
@@ -167,6 +167,7 @@ export default function Home() {
                         <MediaPlayerTime />
                       </div>
                       <div className="flex items-center gap-2">
+                        <MediaPlayerLoop />
                         <MediaPlayerCaptions />
                         <MediaPlayerSettings />
                         <MediaPlayerFullscreen />
